@@ -96,15 +96,27 @@ const { login } = useAuth();
 
 const handleLogin = async () => {
   errorMessage.value = "";
+
+  console.log("📌 [DEBUG] Iniciando login con:", {
+    email: email.value,
+    password: password.value ? "***" : "(vacío)",
+  });
+
   try {
     const response = await login({
       email: email.value,
       password: password.value,
     });
 
+    console.log("📌 [DEBUG] Respuesta login():", response);
+
     if (response?.token && response?.user) {
-      // Guardar token y datos de usuario para Navbar.vue
+      console.log("✅ [DEBUG] Login exitoso, guardando datos...");
+
+      // Guardar token
       localStorage.setItem("token", response.token);
+
+      // Guardar usuario para Navbar.vue
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -112,12 +124,19 @@ const handleLogin = async () => {
         })
       );
 
+      console.log("📌 [DEBUG] Datos guardados en localStorage:", {
+        token: localStorage.getItem("token"),
+        user: localStorage.getItem("user"),
+      });
+
       // Redirigir al Home
       router.push("/");
     } else {
+      console.warn("⚠️ [DEBUG] Respuesta sin token o user");
       errorMessage.value = "Correo o contraseña incorrectos.";
     }
   } catch (err) {
+    console.error("❌ [DEBUG] Error al iniciar sesión:", err);
     errorMessage.value = "Error al iniciar sesión. Intenta nuevamente.";
   }
 };

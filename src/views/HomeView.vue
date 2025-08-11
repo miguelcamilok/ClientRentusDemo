@@ -1,120 +1,7 @@
 <template>
   <div class="container">
     <section class="property-hero">
-      <header class="property-header">
-        <div class="logo" @click="goHome" style="cursor: pointer">
-          <img src="@/assets/img/logo.png" alt="Logo" />
-          <div class="logo-text"><strong>Rent</strong><span>Us</span></div>
-        </div>
-
-        <nav class="property-nav">
-          <a href="" class="nav-link active">Home</a>
-          <a href="#" class="nav-link">Propiedades</a>
-          <a href="#" class="nav-link" @click="goNosotros">Sobre nosotros</a>
-        </nav>
-
-        <!-- Si no está logueado, botón Iniciar Sesión -->
-        <button
-          v-if="!isLoggedIn"
-          @click="goLogin"
-          class="login-btn"
-          type="button"
-        >
-          Iniciar Sesión
-        </button>
-
-        <!-- Si está logueado, mostrar saludo con primer nombre -->
-        <div
-          v-else
-          class="user-box"
-          id="userToggle"
-          @click="toggleUserDropdown"
-          style="cursor: pointer; position: relative"
-        >
-          <img
-            v-if="profilePhoto"
-            :src="profilePhoto"
-            alt="Usuario"
-            class="user-img"
-          />
-          <img v-else src="/img/default.webp" alt="Usuario" class="user-img" />
-          <div class="user-info">Hola, {{ firstName }}</div>
-          <span class="user-arrow">▾</span>
-
-          <!-- Menú desplegable -->
-          <div
-            class="user-dropdown"
-            :class="{ show: showDropdown }"
-            id="userDropdown"
-            @click.stop
-          >
-            <div @click="goPerfil" style="cursor: pointer">
-              <img
-                src="https://img.icons8.com/ios-filled/20/user.png"
-                alt="Perfil"
-              />
-              Perfil
-            </div>
-            <div
-              @click="openMaintenanceModal"
-              class="menu-item"
-              style="cursor: pointer"
-            >
-              <img
-                src="https://img.icons8.com/ios-filled/20/maintenance.png"
-                alt="Mantenimiento"
-              />
-              Mantenimiento
-            </div>
-            <div @click="goContratos" style="cursor: pointer">
-              <img
-                src="https://img.icons8.com/ios-filled/20/agreement.png"
-                alt="Contratos"
-              />
-              Contratos
-            </div>
-            <div @click="goPagos" style="cursor: pointer">
-              <img
-                src="https://img.icons8.com/ios-filled/20/bank-cards.png"
-                alt="Pagos"
-              />
-              Pagos
-            </div>
-            <div @click="openSolicitudesModal" style="cursor: pointer">
-              <img
-                src="https://img.icons8.com/ios-filled/20/document--v1.png"
-                alt="Solicitudes"
-              />
-              Solicitudes
-            </div>
-            <div
-              id="openModalBtn"
-              @click="openNotificaciones"
-              style="cursor: pointer; position: relative"
-            >
-              <img
-                src="https://img.icons8.com/ios-filled/20/appointment-reminders--v1.png"
-                alt="Notificaciones"
-              />
-              Notificaciones
-              <span class="notif-badge">3</span>
-            </div>
-            <div @click="goAjustes" style="cursor: pointer">
-              <img
-                src="https://img.icons8.com/ios-filled/20/settings.png"
-                alt="Ajustes"
-              />
-              Ajustes
-            </div>
-            <div
-              @click="logout"
-              style="cursor: pointer; margin-top: 10px; color: red"
-            >
-              Cerrar sesión
-            </div>
-          </div>
-        </div>
-      </header>
+      <NavBarComponent />
 
       <div class="property-hero-content">
         <section class="hero">
@@ -511,87 +398,14 @@
         </button>
       </div>
     </div>
-    <footer class="footer">
-      <div class="footer-top">
-        <div class="footer-col">
-          <h4>Sobre Nosotros</h4>
-          <p>
-            Somos una plataforma dedicada a ayudarle a encontrar la casa ideal
-            según tu estilo de vida.
-          </p>
-        </div>
-
-        <div class="footer-col">
-          <h4>Enlaces Rápidos</h4>
-          <ul>
-            <li><a href="#">Quiénes Somos</a></li>
-            <li><a href="#">Propiedades</a></li>
-            <li><a href="#">Contacto</a></li>
-            <li><a href="#">Preguntas Frecuentes</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Contacto</h4>
-          <ul>
-            <li>
-              <img
-                src="https://img.icons8.com/ios-glyphs/20/ffffff/new-post.png"
-              />
-              <a href="#">soporte@RentUs.com</a>
-            </li>
-            <li>
-              <img
-                src="https://img.icons8.com/ios-filled/20/ffffff/phone.png"
-              />
-              +57 3218598902
-            </li>
-            <li>
-              <img
-                src="https://img.icons8.com/ios-filled/20/ffffff/marker.png"
-              />
-              Calle RentUs 123, Popayán
-            </li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Síguenos</h4>
-          <div class="social-icons">
-            <a href="#"
-              ><img
-                src="https://img.icons8.com/ios-filled/24/ffffff/facebook-new.png"
-                alt="Facebook"
-            /></a>
-            <a href="#"
-              ><img
-                src="https://img.icons8.com/ios-filled/24/ffffff/instagram-new.png"
-                alt="Instagram"
-            /></a>
-            <a href="#"
-              ><img
-                src="https://img.icons8.com/ios-filled/24/ffffff/twitterx--v2.png"
-                alt="X"
-            /></a>
-          </div>
-        </div>
-      </div>
-
-      <hr />
-
-      <div class="footer-bottom">
-        <p>&copy; 2025 RentUs. Todos los derechos reservados</p>
-        <div>
-          <a href="#">Aviso Legal</a> |
-          <a href="#">Política de Privacidad</a>
-        </div>
-      </div>
-    </footer>
+    <FooterComponent />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
+import NavBarComponent from "@/components/NavBarComponent.vue";
+import FooterComponent from "@/components/FooterComponent.vue";
 import { useRouter } from "vue-router";
 import api from "@/services/api";
 
@@ -995,20 +809,6 @@ function addToCompare(property) {
   // Implementar lógica de comparación
   console.log("Agregar a comparar:", property.title);
 }
-
-// Funciones de navegación existentes
-const goHome = () => router.push("/");
-const goLogin = () => router.push("/login");
-const goNosotros = () => router.push("/sobre-nosotros");
-const goPerfil = () => router.push("/perfil.html");
-const goContratos = () => router.push("/contratos.html");
-const goPagos = () => router.push("/pagos.html");
-const goAjustes = () => router.push("/ajustes.html");
-const goToProperties = () => router.push("/propiedades");
-
-const toggleUserDropdown = () => {
-  showDropdown.value = !showDropdown.value;
-};
 
 const logout = () => {
   localStorage.removeItem("token");
