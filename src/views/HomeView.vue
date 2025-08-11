@@ -410,6 +410,7 @@ import { useRouter } from "vue-router";
 import api from "@/services/api";
 
 let styleLinks = [];
+const goToProperties = () => router.push("/propiedades");
 
 // Estados existentes
 const activeClientsCount = ref(0);
