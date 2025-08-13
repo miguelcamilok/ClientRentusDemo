@@ -106,15 +106,34 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import NavBarComponent from "@/components/NavBarComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
 
 let styleLinks = [];
+let intervalIdClients = null;
+let intervalId = null;
+const showDropdown = ref(false);
+
+// Event handlers
+function handleClickOutsideDropdown(event) {
+  const userMenu = document.getElementById("userToggle");
+  const dropdown = document.getElementById("userDropdown");
+
+  if (!userMenu || !dropdown) return;
+
+  if (
+    !userMenu.contains(event.target) &&
+    !dropdown.contains(event.target) &&
+    showDropdown.value
+  ) {
+    showDropdown.value = false;
+  }
+}
 
 onMounted(async () => {
   const cssFiles = [
-    "/css/home/index.css",
+    "/css/home/home.css",
     "/css/home/propiedades.css",
     "/css/home/nosotros.css",
   ];
@@ -129,10 +148,11 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  styleLinks.forEach((link) => {
-    if (link.parentNode) {
-      link.parentNode.removeChild(link);
-    }
-  });
+  styleLinks.forEach((link) => link.parentNode?.removeChild(link));
+
+  if (intervalId) clearInterval(intervalId);
+  if (intervalIdClients) clearInterval(intervalIdClients);
+
+  document.removeEventListener("click", handleClickOutsideDropdown);
 });
 </script>

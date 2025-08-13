@@ -12,8 +12,10 @@
       <div class="footer-col">
         <h4>Enlaces Rápidos</h4>
         <ul>
-          <li><a href="#">Quiénes Somos</a></li>
-          <li><a href="#">Propiedades</a></li>
+          <li>
+            <router-link to="/sobre-nosotros">Quiénes Somos</router-link>
+          </li>
+          <li><router-link to="/propiedades">Propiedades</router-link></li>
           <li><a href="#">Contacto</a></li>
           <li><a href="#">Preguntas Frecuentes</a></li>
         </ul>

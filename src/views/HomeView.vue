@@ -414,9 +414,9 @@ const goToProperties = () => router.push("/propiedades");
 
 // Estados existentes
 const activeClientsCount = ref(0);
-let intervalIdClients = null;
 const propertyCount = ref(0);
 const targetCount = ref(0);
+let intervalIdClients = null;
 let intervalId = null;
 
 const router = useRouter();
@@ -840,17 +840,19 @@ onMounted(async () => {
   await fetchUserData();
 
   const cssFiles = [
-    "/css/home/index.css",
+    "/css/home/home.css",
     "/css/home/propiedades.css",
     "/css/home/modals.css",
   ];
 
-  styleLinks = cssFiles.map((href) => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = href;
-    document.head.appendChild(link);
-    return link;
+  cssFiles.forEach((href) => {
+    if (!document.querySelector(`link[href="${href}"]`)) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      link.dataset.dynamic = "true";
+      document.head.appendChild(link);
+    }
   });
 
   // Cargar datos iniciales
@@ -867,11 +869,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  styleLinks.forEach((link) => {
-    if (link.parentNode) {
-      link.parentNode.removeChild(link);
-    }
-  });
+  styleLinks.forEach((link) => link.parentNode?.removeChild(link));
 
   if (intervalId) clearInterval(intervalId);
   if (intervalIdClients) clearInterval(intervalIdClients);

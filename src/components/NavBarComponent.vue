@@ -114,6 +114,12 @@
       </div>
     </div>
   </header>
+
+  <router-view v-slot="{ Component }">
+    <transition name="fade" mode="out-in">
+      <component :is="Component" />
+    </transition>
+  </router-view>
 </template>
 
 <script setup>
@@ -212,7 +218,23 @@ onBeforeUnmount(() => {
   right: 0;
   background: #fff;
 }
+
 .user-dropdown.show {
   display: block;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-5px);
 }
 </style>

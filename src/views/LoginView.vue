@@ -141,6 +141,10 @@ const handleLogin = async () => {
   }
 };
 
+document.querySelectorAll('link[data-dynamic="true"]').forEach((link) => {
+  link.remove();
+});
+
 const setTab = (tab: string) => {
   if (tab === "register") router.push("/register");
   if (tab === "login") router.push("/login");

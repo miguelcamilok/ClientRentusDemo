@@ -416,9 +416,6 @@ const selectedProperty = ref(null);
 const currentPropertyIndex = ref(0);
 const currentImageIndex = ref(0);
 
-// Configuración para limitar propiedades
-const PROPERTIES_LIMIT = ref(3); // Número máximo de propiedades a mostrar
-
 // Estados para modales
 const showPropertyModal = ref(false);
 const showRequestModal = ref(false);
@@ -481,7 +478,6 @@ const displayedProperties = computed(() => {
   const featured = filteredProperties.value.filter((p) => p.featured);
   const regular = filteredProperties.value.filter((p) => !p.featured);
 
-  const combined = [...featured, ...regular];
   return [...featured, ...regular];
 });
 
@@ -736,63 +732,10 @@ function handleImageError(event) {
 
   // Usar la imagen SVG base64 personalizada
   event.target.src = DEFAULT_PROPERTY_IMAGE;
-
-  // Función mejorada para precargar imágenes (modo silencioso)
-  async function preloadPropertyImages() {
-    const imagePromises = properties.value.map(async (property) => {
-      const imageUrl = getPropertyImage(property);
-
-      if (imageUrl === "/img/property-placeholder.jpg") {
-        return; // Ya sabemos que no tiene imagen válida
-      }
-
-      try {
-        await new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = resolve;
-          img.onerror = reject;
-          img.src = imageUrl;
-
-          // Timeout para evitar carga indefinida
-          setTimeout(() => reject(new Error("Timeout de carga")), 3000);
-        });
-      } catch (error) {
-        // Marcar esta propiedad como que tiene error de imagen (silenciosamente)
-        property._imageError = true;
-
-        // NO hacer console.log/warn aquí para evitar spam en consola
-        // La validación ya se hizo en getPropertyImage()
-      }
-    });
-
-    await Promise.allSettled(imagePromises);
-
-    // Solo un log resumen en desarrollo
-    if (process.env.NODE_ENV === "development") {
-      const errorCount = properties.value.filter((p) => p._imageError).length;
-      if (errorCount > 0) {
-        console.info(
-          `📊 ${errorCount} de ${properties.value.length} propiedades usan imagen placeholder`
-        );
-      }
-    }
-  }
 }
 
 const DEFAULT_PROPERTY_IMAGE =
   "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjE4IiBmaWxsPSIjNmM3NTdkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2VuIG5vIGRpc3BvbmlibGU8L3RleHQ+PC9zdmc+";
-
-function createPlaceholderImage() {
-  const svg = `
-    <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-      <rect width="300" height="200" fill="#f8f9fa" stroke="#dee2e6" stroke-width="2"/>
-      <text x="50%" y="50%" font-size="16" fill="#6c757d" text-anchor="middle" dy=".3em">
-        🏠 Imagen no disponible
-      </text>
-    </svg>
-  `;
-  return `data:image/svg+xml;base64,${btoa(svg)}`;
-}
 
 function truncateDescription(description, maxLength = 100) {
   if (!description) return "";
@@ -977,7 +920,7 @@ onMounted(async () => {
   await fetchUserData();
 
   const cssFiles = [
-    "/css/home/index.css",
+    "/css/home/home.css",
     "/css/home/propiedades.css",
     "/css/home/modals.css",
   ];
@@ -1004,11 +947,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  styleLinks.forEach((link) => {
-    if (link.parentNode) {
-      link.parentNode.removeChild(link);
-    }
-  });
+  styleLinks.forEach((link) => link.parentNode?.removeChild(link));
 
   if (intervalId) clearInterval(intervalId);
   if (intervalIdClients) clearInterval(intervalIdClients);
